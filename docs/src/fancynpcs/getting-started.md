@@ -4,7 +4,12 @@ icon: info
 ---
 # Getting started
 
-!!! danger
+!!!danger
+This is the old documentation site for FancyInnovations, which is no longer maintained.
+The new documentation site can be found at [fancyinnovations.com/docs/minecraft-plugins/fancynpcs](https://fancyinnovations.com/docs/minecraft-plugins/fancynpcs).
+!!!
+
+!!!danger
 Be aware, that only Paper and Folia is supported, but the plugin should work on any of its forks (like Purpur or Pufferfish). Spigot, Bukkit, Sponge and Fabric is not supported.
 !!!
 

@@ -1,0 +1,2 @@
+- Added copy_to_clipboard action
+- Added configurable body width

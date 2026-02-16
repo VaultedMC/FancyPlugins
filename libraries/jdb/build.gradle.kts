@@ -1,11 +1,11 @@
 plugins {
     id("java")
     id("maven-publish")
-    id("com.github.johnrengelman.shadow")
+    id("com.gradleup.shadow")
 }
 
 group = "de.oliver"
-version = findProperty("jdbVersion") as String
+version = getJDBVersion()
 description = "Library for storing JSON data locally"
 
 java {
@@ -32,6 +32,48 @@ tasks {
     publishing {
         repositories {
             maven {
+                name = "fancyspacesReleases"
+                url = uri("https://maven.fancyspaces.net/fancyinnovations/releases")
+
+                credentials(HttpHeaderCredentials::class) {
+                    name = "Authorization"
+                    value = providers
+                        .gradleProperty("fancyspacesApiKey")
+                        .orElse(
+                            providers
+                                .environmentVariable("FANCYSPACES_API_KEY")
+                                .orElse("")
+                        )
+                        .get()
+                }
+
+                authentication {
+                    create<HttpHeaderAuthentication>("header")
+                }
+            }
+
+            maven {
+                name = "fancyspacesSnapshots"
+                url = uri("https://maven.fancyspaces.net/fancyinnovations/snapshots")
+
+                credentials(HttpHeaderCredentials::class) {
+                    name = "Authorization"
+                    value = providers
+                        .gradleProperty("fancyspacesApiKey")
+                        .orElse(
+                            providers
+                                .environmentVariable("FANCYSPACES_API_KEY")
+                                .orElse("")
+                        )
+                        .get()
+                }
+
+                authentication {
+                    create<HttpHeaderAuthentication>("header")
+                }
+            }
+
+            maven {
                 name = "fancyinnovationsReleases"
                 url = uri("https://repo.fancyinnovations.com/releases")
                 credentials(PasswordCredentials::class)
@@ -55,7 +97,7 @@ tasks {
             create<MavenPublication>("maven") {
                 groupId = "de.oliver"
                 artifactId = "JDB"
-                version = findProperty("jdbVersion") as String
+                version = getJDBVersion()
                 from(project.components["java"])
             }
         }
@@ -84,4 +126,8 @@ tasks {
     test {
         useJUnitPlatform()
     }
+}
+
+fun getJDBVersion(): String {
+    return file("VERSION").readText()
 }

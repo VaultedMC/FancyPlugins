@@ -4,6 +4,11 @@ icon: dot
 
 # Getting started
 
+!!!danger
+This is the old documentation site for FancyInnovations, which is no longer maintained.
+The new documentation site can be found at [fancyinnovations.com/docs/minecraft-plugins/fancynpcs](https://fancyinnovations.com/docs/minecraft-plugins/fancynpcs).
+!!!
+
 ## Include the API in your project
 
 To include the FancyNPCs API in your project, you need to add the following dependency to your `build.gradle.kts` or `pom.xml` file.
@@ -69,7 +74,7 @@ To let FancyNpcs handle the NPC, you need to register it. FancyNpcs will take ca
 FancyNpcsPlugin.get().getNpcManager().registerNpc(npc);
 ```
 
-!!! warning
+!!!warning
 Do not register npcs in the first few seconds after the server has started. You need to wait at least 10 seconds before registering npcs. Otherwise, the npcs will not get registered correctly.
 You can also listen to the `NpcsLoadedEvent` to know when you can register npcs.
 !!!
@@ -136,5 +141,5 @@ npc.removeForAll();
 
 You can find the JavaDocs for the FancyNpcs API [here](https://repo.fancyinnovations.com/javadoc/releases/de/oliver/FancyNpcs/latest).
 
-Join the [FancyInnovations Discord](https://discord.gg/ZUgYCEJUEx) for help and support. There is a dedicated channel for help about the api (`#npcs-dev`).
+Join the [FancyInnovations Discord](https://discord.gg/ZUgYCEJUEx) for help and support. There is a dedicated channel for help about the api (`#npcs-api`).
 ```

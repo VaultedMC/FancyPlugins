@@ -4,6 +4,7 @@ import de.oliver.fancyholograms.api.data.HologramData;
 import de.oliver.fancyholograms.api.data.TextHologramData;
 import de.oliver.fancyholograms.api.data.property.Visibility;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.World;
@@ -32,6 +33,7 @@ public abstract class Hologram {
 
     public static final int LINE_WIDTH = 1000;
     public static final Color TRANSPARENT = Color.fromARGB(0);
+    public static final Color DEFAULT_BACKGROUND = Color.fromARGB(64, 0, 0, 0);
     protected static final int MINIMUM_PROTOCOL_VERSION = 762;
 
     protected final @NotNull HologramData data;
@@ -354,6 +356,10 @@ public abstract class Hologram {
         }
 
         var text = String.join("\n", textData.getText());
+
+        if (Bukkit.isStopping()) {
+            return MiniMessage.miniMessage().deserialize(text);
+        }
 
         return ModernChatColorHandler.translate(text, player);
     }

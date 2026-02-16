@@ -7,6 +7,11 @@ order: 10
 
 # /Hologram
 
+!!!danger
+This is the old documentation site for FancyInnovations, which is no longer maintained.
+The new documentation site can be found at [fancyinnovations.com/docs/minecraft-plugins/fancyholograms](https://fancyinnovations.com/docs/minecraft-plugins/fancyholograms).
+!!!
+
 ## Manage holograms
 
 ### help
@@ -79,6 +84,13 @@ Permission: ``FancyHolograms.admin``
 Description: Rotates the hologram around the x-axis<br/>
 Syntax: ``/Hologram edit (hologram) rotatepitch (degrees)``<br/>
 Permission: ``FancyHolograms.admin``
+
+### translate
+
+Description: Translates the hologram by a certain amount in the x, y and z direction<br/>
+Syntax: ``/Hologram edit (hologram) rotatepitch (x) (y) (z)``<br/>
+Permission: ``FancyHolograms.admin``
+
 
 ### visibilityDistance
 
@@ -168,9 +180,9 @@ Permission: ``FancyHolograms.admin``
 Description: Sets the interval for refreshing the text (useful for
 placeholders)<br/>
 Syntax: ``/Hologram edit (hologram) updateTextInterval (ticks | seconds | minutes)``<br/>
-Example ticks:``/Hologram edit (hologram) updateTextInterval (15)``<br/>
-Example seconds:``/Hologram edit (hologram) updateTextInterval (5s)``<br/>
-Example minutes:``/Hologram edit (hologram) updateTextInterval (5m)``<br/>
+Example ticks:``/Hologram edit (hologram) updateTextInterval 15``<br/>
+Example seconds:``/Hologram edit (hologram) updateTextInterval 5s``<br/>
+Example minutes:``/Hologram edit (hologram) updateTextInterval 5m``<br/>
 Permission: ``FancyHolograms.admin``
 
 ### background

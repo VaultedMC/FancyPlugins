@@ -5,33 +5,13 @@ plugins {
     id("maven-publish")
     id("xyz.jpenilla.run-paper")
     id("com.gradleup.shadow")
-    id("net.minecrell.plugin-yml.paper")
-    id("io.papermc.hangar-publish-plugin")
-    id("com.modrinth.minotaur")
+    id("de.eldoria.plugin-yml.paper")
 }
 
 runPaper.folia.registerTask()
 
-val supportedVersions =
-    listOf(
-        "1.19.4",
-        "1.20",
-        "1.20.1",
-        "1.20.2",
-        "1.20.3",
-        "1.20.4",
-        "1.20.5",
-        "1.20.6",
-        "1.21",
-        "1.21.1",
-        "1.21.2",
-        "1.21.3",
-        "1.21.4",
-        "1.21.5"
-    )
-
 allprojects {
-    group = "de.oliver"
+    group = "com.fancyinnovations"
     version = getFNVersion()
     description = "Simple, lightweight and fast NPC plugin using packets"
 
@@ -41,25 +21,16 @@ allprojects {
         maven(url = "https://repo.papermc.io/repository/maven-public/")
         maven(url = "https://repo.fancyinnovations.com/releases")
         maven(url = "https://repo.lushplugins.org/releases")
-        maven(url = "https://repo.inventivetalent.org/repository/maven-snapshots/")
-        maven(url = "https://repo.extendedclip.com/releases/")
+        maven(url = "https://repo.inventivetalent.org/repository/maven-snapshots/") // for cloud command framework
+        maven(url = "https://repo.extendedclip.com/releases/") // for PlaceholderAPI
+        maven(url = "https://maven.enginehub.org/repo/") // for WorldEdit
     }
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.21.5-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
 
     implementation(project(":plugins:fancynpcs:fn-api"))
-    implementation(project(":plugins:fancynpcs:implementation_1_21_5"))
-    implementation(project(":plugins:fancynpcs:implementation_1_21_4"))
-    implementation(project(":plugins:fancynpcs:implementation_1_21_3"))
-    implementation(project(":plugins:fancynpcs:implementation_1_21_1"))
-    implementation(project(":plugins:fancynpcs:implementation_1_20_6"))
-    implementation(project(":plugins:fancynpcs:implementation_1_20_4", configuration = "reobf"))
-    implementation(project(":plugins:fancynpcs:implementation_1_20_2", configuration = "reobf"))
-    implementation(project(":plugins:fancynpcs:implementation_1_20_1", configuration = "reobf"))
-    implementation(project(":plugins:fancynpcs:implementation_1_20", configuration = "reobf"))
-    implementation(project(":plugins:fancynpcs:implementation_1_19_4", configuration = "reobf"))
 
     rootProject.subprojects
         .filter { it.path.startsWith(":libraries:packets:implementations") }
@@ -69,24 +40,27 @@ dependencies {
     implementation(project(":libraries:common"))
     implementation(project(":libraries:jdb"))
     implementation(project(":libraries:plugin-tests"))
-    compileOnly("org.lushplugins:ChatColorHandler:5.1.6")
-    implementation("de.oliver.FancyAnalytics:api:0.1.6")
-    implementation("de.oliver.FancyAnalytics:logger:0.0.6")
-    implementation("org.incendo:cloud-core:2.1.0-SNAPSHOT")
-    implementation("org.incendo:cloud-paper:2.0.0-SNAPSHOT")
-    implementation("org.incendo:cloud-annotations:2.1.0-SNAPSHOT")
-    annotationProcessor("org.incendo:cloud-annotations:2.1.0-SNAPSHOT")
+    implementation(project(":libraries:config"))
+    compileOnly("org.lushplugins:ChatColorHandler:6.0.4")
+    implementation("de.oliver.FancyAnalytics:java-sdk:0.0.5")
+    implementation("de.oliver.FancyAnalytics:mc-api:0.1.12")
+    implementation("de.oliver.FancyAnalytics:logger:0.0.8")
+    implementation("org.incendo:cloud-core:2.0.0")
+    implementation("org.incendo:cloud-paper:2.0.0-beta.13")
+    implementation("org.incendo:cloud-annotations:2.0.0")
+    annotationProcessor("org.incendo:cloud-annotations:2.0.0")
     implementation("org.mineskin:java-client-jsoup:3.0.3-SNAPSHOT")
 
     compileOnly("me.clip:placeholderapi:2.11.6")
-    compileOnly("com.intellectualsites.plotsquared:plotsquared-core:7.5.2")
+    compileOnly("com.intellectualsites.plotsquared:plotsquared-core:7.5.6")
+    compileOnly("com.sk89q.worldedit:worldedit-bukkit:7.3.14")
 }
 
 paper {
     name = "FancyNpcs"
-    main = "de.oliver.fancynpcs.FancyNpcs"
-    bootstrapper = "de.oliver.fancynpcs.loaders.FancyNpcsBootstrapper"
-    loader = "de.oliver.fancynpcs.loaders.FancyNpcsLoader"
+    main = "com.fancyinnovations.fancynpcs.FancyNpcs"
+    bootstrapper = "com.fancyinnovations.fancynpcs.loaders.FancyNpcsBootstrapper"
+    loader = "com.fancyinnovations.fancynpcs.loaders.FancyNpcsLoader"
     foliaSupported = true
     version = getFNVersion()
     description = "Simple, lightweight and fast NPC plugin using packets"
@@ -109,19 +83,28 @@ paper {
 
 tasks {
     runServer {
-        minecraftVersion("1.21.5")
+        minecraftVersion("1.21.11")
 
         downloadPlugins {
-            hangar("ViaVersion", "5.3.2")
-            hangar("ViaBackwards", "5.3.2")
-            hangar("PlaceholderAPI", "2.11.6")
-//            modrinth("multiverse-core", "4.3.11")
+//            hangar("ViaVersion", "5.4.0")
+//            hangar("ViaBackwards", "5.4.0")
+//            hangar("PlaceholderAPI", "2.11.6")
+//            modrinth("multiverse-core", "5.0.2")
+        }
+    }
+
+    register<Copy>("copyToTestServer") {
+        dependsOn(shadowJar)
+        from(shadowJar.get().archiveFile)
+        into("C:/Users/NISO/Desktop/1.21.10 - Copy/plugins")
+        doLast {
+            println("Copied FancyNpcs to test server plugins folder")
         }
     }
 
     shadowJar {
-        relocate("org.incendo", "de.oliver")
-        relocate("org.lushplugins.chatcolorhandler", "de.oliver.fancynpcs.libs.chatcolorhandler")
+        relocate("org.incendo", "com.fancyinnovations")
+        relocate("org.lushplugins.chatcolorhandler", "com.fancyinnovations.fancynpcs.libs.chatcolorhandler")
         archiveClassifier.set("")
         archiveBaseName.set("FancyNpcs")
         dependsOn(":plugins:fancynpcs:fn-api:shadowJar")
@@ -176,8 +159,9 @@ tasks {
         val props = mapOf(
             "description" to project.description,
             "version" to getFNVersion(),
-            "hash" to gitCommitHash.get(),
-            "build" to (System.getenv("BUILD_ID") ?: "").ifEmpty { "undefined" }
+            "commit_hash" to gitCommitHash.get(),
+            "channel" to (System.getenv("RELEASE_CHANNEL") ?: "").ifEmpty { "undefined" },
+            "platform" to (System.getenv("RELEASE_PLATFORM") ?: "").ifEmpty { "undefined" }
         )
 
         inputs.properties(props)
@@ -190,14 +174,6 @@ tasks {
             expand(props)
         }
     }
-}
-
-tasks.publishAllPublicationsToHangar {
-    dependsOn(":plugins:fancynpcs:shadowJar")
-}
-
-tasks.modrinth {
-    dependsOn(":plugins:fancynpcs:shadowJar")
 }
 
 java {
@@ -214,35 +190,4 @@ val gitCommitMessage: Provider<String> = providers.exec {
 
 fun getFNVersion(): String {
     return file("VERSION").readText()
-}
-
-hangarPublish {
-    publications.register("plugin") {
-        version = getFNVersion()
-        id = "FancyNpcs"
-        channel = "Alpha"
-
-        apiKey.set(System.getenv("HANGAR_PUBLISH_API_TOKEN"))
-
-        platforms {
-            paper {
-                jar = tasks.shadowJar.flatMap { it.archiveFile }
-                platformVersions.set(supportedVersions)
-            }
-        }
-
-        changelog = gitCommitMessage.get()
-    }
-}
-
-modrinth {
-    token.set(System.getenv("MODRINTH_PUBLISH_API_TOKEN"))
-    projectId.set("fancynpcs")
-    versionNumber.set(getFNVersion())
-    versionType.set("alpha")
-    uploadFile.set(file("build/libs/${project.name}-${getFNVersion()}.jar"))
-    gameVersions.addAll(supportedVersions)
-    loaders.add("paper")
-    loaders.add("folia")
-    changelog.set(gitCommitMessage.get())
 }

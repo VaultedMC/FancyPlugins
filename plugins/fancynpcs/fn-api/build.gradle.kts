@@ -4,26 +4,69 @@ plugins {
     id("com.gradleup.shadow")
 }
 
-val minecraftVersion = "1.19.4"
+val minecraftVersion = "1.20"
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:$minecraftVersion-R0.1-SNAPSHOT")
 
     compileOnly(project(":libraries:common"))
-    compileOnly("de.oliver.FancyAnalytics:logger:0.0.6")
+    compileOnly(project(":libraries:config"))
+    compileOnly("de.oliver.FancyAnalytics:logger:0.0.8")
 
-    implementation("org.lushplugins:ChatColorHandler:5.1.6")
+    implementation("org.lushplugins:ChatColorHandler:6.0.4")
 }
 
 tasks {
     shadowJar {
         archiveClassifier.set("")
 
-        relocate("org.lushplugins.chatcolorhandler", "de.oliver.fancynpcs.libs.chatcolorhandler")
+        relocate("org.lushplugins.chatcolorhandler", "com.fancyinnovations.fancynpcs.libs.chatcolorhandler")
     }
 
     publishing {
         repositories {
+            maven {
+                name = "fancyspacesReleases"
+                url = uri("https://maven.fancyspaces.net/fancyinnovations/releases")
+
+                credentials(HttpHeaderCredentials::class) {
+                    name = "Authorization"
+                    value = providers
+                        .gradleProperty("fancyspacesApiKey")
+                        .orElse(
+                            providers
+                                .environmentVariable("FANCYSPACES_API_KEY")
+                                .orElse("")
+                        )
+                        .get()
+                }
+
+                authentication {
+                    create<HttpHeaderAuthentication>("header")
+                }
+            }
+
+            maven {
+                name = "fancyspacesSnapshots"
+                url = uri("https://maven.fancyspaces.net/fancyinnovations/snapshots")
+
+                credentials(HttpHeaderCredentials::class) {
+                    name = "Authorization"
+                    value = providers
+                        .gradleProperty("fancyspacesApiKey")
+                        .orElse(
+                            providers
+                                .environmentVariable("FANCYSPACES_API_KEY")
+                                .orElse("")
+                        )
+                        .get()
+                }
+
+                authentication {
+                    create<HttpHeaderAuthentication>("header")
+                }
+            }
+
             maven {
                 name = "fancyinnovationsReleases"
                 url = uri("https://repo.fancyinnovations.com/releases")
@@ -46,17 +89,12 @@ tasks {
         }
         publications {
             create<MavenPublication>("maven") {
-                groupId = "de.oliver"
+                groupId = "com.fancyinnovations"
                 artifactId = "FancyNpcs"
                 version = getFNVersion()
                 from(project.components["java"])
             }
         }
-    }
-
-    java {
-        withSourcesJar()
-        withJavadocJar()
     }
 
     javadoc {
@@ -65,9 +103,14 @@ tasks {
 
     compileJava {
         options.encoding = Charsets.UTF_8.name()
-        options.release = 17
-
+        options.release = 21
     }
+}
+
+java {
+    toolchain.languageVersion.set(JavaLanguageVersion.of(21))
+    withSourcesJar()
+    withJavadocJar()
 }
 
 fun getFNVersion(): String {
