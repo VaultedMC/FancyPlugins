@@ -1,0 +1,42 @@
+language_name: default
+messages:
+  dialog:
+    not_found: "<dark_gray>› <gray>Dialog {warningColor}{id}<gray> is not registered."
+  confirmation_dialog:
+    input_mismatch: "<dark_gray>› <gray>Your input does not match the expected phrase."
+  commands:
+    dialog:
+      open:
+        self: "<dark_gray>› <gray>Opened dialog {warningColor}{id}<gray>."
+        other: "<dark_gray>› <gray>Opened dialog {warningColor}{id}<gray> for {target}."
+        console_requires_target: "<dark_gray>› <gray>Console must specify a target player to open dialog {warningColor}{id}<gray>. Use: /dialog open {id} <player>"
+      list:
+        empty: "<dark_gray>› <gray>There are no dialogs registered."
+        header: "<dark_gray>› <gray>Registered dialogs:"
+        entry: "<dark_gray>› <gray> - {warningColor}{id}<gray> ({title})"
+    fancydialogs:
+      version: "<dark_gray>› <gray>You are running FancyDialogs {warningColor}{version}<gray>."
+      config:
+        reload:
+          success: "<dark_gray>› <gray>Successfully reloaded the configuration."
+          cancelled: "<dark_gray>› <gray>Reloading the configuration was cancelled."
+      storage:
+        save:
+          success: "<dark_gray>› <gray>Successfully saved {warningColor}{count}<gray> dialogs to the storage."
+        load:
+          success: "<dark_gray>› <gray>Successfully loaded {warningColor}{count}<gray> dialogs from the storage."
+          cancelled: "<dark_gray>› <gray>Loading dialogs from storage was cancelled."
+        reload:
+          success: "<dark_gray>› <gray>Successfully reloaded {warningColor}{count}<gray> dialogs from the storage."
+          cancelled: "<dark_gray>› <gray>Reloading dialogs from storage was cancelled."
+      registry:
+        clear:
+          success: "<dark_gray>› <gray>Successfully cleared all registered dialogs."
+          cancelled: "<dark_gray>› <gray>Clearing registered dialogs was cancelled."
+        unregister:
+          success: "<dark_gray>› <gray>Successfully unregistered dialog {warningColor}{id}<gray>."
+          cancelled: "<dark_gray>› <gray>Unregistering dialog {warningColor}{id}<gray> was cancelled."
+      joined_players_cache:
+        clear:
+          success: "<dark_gray>› <gray>Successfully cleared the joined players cache."
+          cancelled: "<dark_gray>› <gray>Clearing the joined players cache was cancelled."

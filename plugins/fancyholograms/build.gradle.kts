@@ -7,30 +7,10 @@ plugins {
 
     id("xyz.jpenilla.run-paper")
     id("com.gradleup.shadow")
-    id("net.minecrell.plugin-yml.paper")
-    id("io.papermc.hangar-publish-plugin")
-    id("com.modrinth.minotaur")
+    id("de.eldoria.plugin-yml.paper")
 }
 
 runPaper.folia.registerTask()
-
-val supportedVersions =
-    listOf(
-        "1.19.4",
-        "1.20",
-        "1.20.1",
-        "1.20.2",
-        "1.20.3",
-        "1.20.4",
-        "1.20.5",
-        "1.20.6",
-        "1.21",
-        "1.21.1",
-        "1.21.2",
-        "1.21.3",
-        "1.21.4",
-        "1.21.5",
-    )
 
 allprojects {
     group = "de.oliver"
@@ -53,14 +33,9 @@ allprojects {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.21.5-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
 
     implementation(project(":plugins:fancyholograms:fh-api"))
-    implementation(project(":plugins:fancyholograms:implementation_1_20_4", configuration = "reobf"))
-    implementation(project(":plugins:fancyholograms:implementation_1_20_2", configuration = "reobf"))
-    implementation(project(":plugins:fancyholograms:implementation_1_20_1", configuration = "reobf"))
-    implementation(project(":plugins:fancyholograms:implementation_1_19_4", configuration = "reobf"))
-
 
     rootProject.subprojects
         .filter { it.path.startsWith(":libraries:packets:implementations") }
@@ -68,22 +43,26 @@ dependencies {
     implementation(project(":libraries:common"))
     implementation(project(":libraries:plugin-tests"))
     implementation(project(":libraries:jdb"))
+    implementation(project(":libraries:config"))
     implementation(project(":libraries:packets"))
     implementation(project(":libraries:packets:packets-api"))
-    implementation("de.oliver.FancyAnalytics:api:0.1.6")
-    implementation("de.oliver.FancyAnalytics:logger:0.0.6")
+    implementation("de.oliver.FancyAnalytics:java-sdk:0.0.5")
+    implementation("de.oliver.FancyAnalytics:mc-api:0.1.12")
+    implementation("de.oliver.FancyAnalytics:logger:0.0.8")
 
+    implementation("io.github.revxrsal:lamp.common:4.0.0-rc.12")
+    implementation("io.github.revxrsal:lamp.bukkit:4.0.0-rc.12")
     compileOnly(project(":plugins:fancynpcs:fn-api"))
-    compileOnly("org.lushplugins:ChatColorHandler:5.1.6")
+    compileOnly("org.lushplugins:ChatColorHandler:6.0.4")
     compileOnly("com.viaversion:viaversion-api:5.2.1")
     compileOnly("org.geysermc.floodgate:api:2.2.4-SNAPSHOT")
 }
 
 paper {
     name = "FancyHolograms"
-    main = "de.oliver.fancyholograms.main.FancyHologramsPlugin"
-    bootstrapper = "de.oliver.fancyholograms.main.FancyHologramsBootstrapper"
-    loader = "de.oliver.fancyholograms.main.FancyHologramsLoader"
+    main = "com.fancyinnovations.fancyholograms.main.FancyHologramsPlugin"
+    bootstrapper = "com.fancyinnovations.fancyholograms.main.FancyHologramsBootstrapper"
+    loader = "com.fancyinnovations.fancyholograms.main.FancyHologramsLoader"
     foliaSupported = true
     version = getFHVersion()
     description = "Simple, lightweight and fast hologram plugin using display entities"
@@ -117,13 +96,13 @@ paper {
 
 tasks {
     runServer {
-        minecraftVersion("1.21.5")
+        minecraftVersion("1.21.11")
 
         downloadPlugins {
-            modrinth("fancynpcs", "2.5.0")
-            hangar("ViaVersion", "5.3.2")
-            hangar("ViaBackwards", "5.3.2")
-//            modrinth("multiverse-core", "4.3.11")
+            modrinth("fancynpcs", "2.7.0")
+//            hangar("ViaVersion", "5.3.2")
+//            hangar("ViaBackwards", "5.3.2")
+            modrinth("multiverse-core", "5.5.2")
             hangar("PlaceholderAPI", "2.11.6")
 //            modrinth("DecentHolograms", "2.8.12")
         }
@@ -149,7 +128,9 @@ tasks {
         val props = mapOf(
             "description" to project.description,
             "version" to getFHVersion(),
-            "hash" to getCurrentCommitHash(),
+            "commit_hash" to getCurrentCommitHash(),
+            "channel" to (System.getenv("RELEASE_CHANNEL") ?: "").ifEmpty { "undefined" },
+            "platform" to (System.getenv("RELEASE_PLATFORM") ?: "").ifEmpty { "undefined" }
         )
 
         inputs.properties(props)
@@ -162,14 +143,6 @@ tasks {
             expand(props)
         }
     }
-}
-
-tasks.publishAllPublicationsToHangar {
-    dependsOn("shadowJar")
-}
-
-tasks.modrinth {
-    dependsOn("shadowJar")
 }
 
 java {
@@ -186,35 +159,4 @@ fun getLastCommitMessage(): String {
 
 fun getFHVersion(): String {
     return file("VERSION").readText()
-}
-
-hangarPublish {
-    publications.register("plugin") {
-        version = getFHVersion()
-        id = "FancyHolograms"
-        channel = "Alpha"
-
-        apiKey.set(System.getenv("HANGAR_PUBLISH_API_TOKEN"))
-
-        platforms {
-            paper {
-                jar = tasks.shadowJar.flatMap { it.archiveFile }
-                platformVersions = supportedVersions
-            }
-        }
-
-        changelog = getLastCommitMessage()
-    }
-}
-
-modrinth {
-    token.set(System.getenv("MODRINTH_PUBLISH_API_TOKEN"))
-    projectId.set("fancyholograms")
-    versionNumber.set(getFHVersion())
-    versionType.set("alpha")
-    uploadFile.set(file("build/libs/FancyHolograms-${getFHVersion()}.jar"))
-    gameVersions.addAll(supportedVersions)
-    loaders.add("paper")
-    loaders.add("folia")
-    changelog.set(getLastCommitMessage())
 }

@@ -4,7 +4,7 @@ plugins {
 
     id("xyz.jpenilla.run-paper")
     id("com.gradleup.shadow")
-    id("net.minecrell.plugin-yml.paper")
+    id("de.eldoria.plugin-yml.paper")
 }
 
 runPaper.folia.registerTask()
@@ -17,13 +17,12 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.21.5-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
 
     implementation(project(":libraries:packets"))
     implementation(project(":libraries:packets:packets-api"))
-    implementation(project(":libraries:packets:implementations:1_20_6"))
     implementation(project(":libraries:packets:implementations:1_21_3"))
-    implementation("de.oliver.FancyAnalytics:logger:0.0.6")
+    implementation("de.oliver.FancyAnalytics:logger:0.0.8")
 }
 
 paper {
@@ -39,7 +38,7 @@ paper {
 
 tasks {
     runServer {
-        minecraftVersion("1.21.5")
+        minecraftVersion("1.21.10")
     }
 
     shadowJar {

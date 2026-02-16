@@ -18,14 +18,16 @@ allprojects {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.21.5-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
 
     implementation(project(":libraries:packets:packets-api"))
+    implementation(project(":libraries:packets:implementations:1_21_11"))
+    implementation(project(":libraries:packets:implementations:1_21_9"))
+    implementation(project(":libraries:packets:implementations:1_21_6"))
     implementation(project(":libraries:packets:implementations:1_21_5"))
     implementation(project(":libraries:packets:implementations:1_21_4"))
     implementation(project(":libraries:packets:implementations:1_21_3"))
-    implementation(project(":libraries:packets:implementations:1_20_6"))
-    implementation("de.oliver.FancyAnalytics:logger:0.0.4")
+    implementation("de.oliver.FancyAnalytics:logger:0.0.8")
 }
 
 tasks {
@@ -39,6 +41,48 @@ tasks {
 
     publishing {
         repositories {
+            maven {
+                name = "fancyspacesReleases"
+                url = uri("https://maven.fancyspaces.net/fancyinnovations/releases")
+
+                credentials(HttpHeaderCredentials::class) {
+                    name = "Authorization"
+                    value = providers
+                        .gradleProperty("fancyspacesApiKey")
+                        .orElse(
+                            providers
+                                .environmentVariable("FANCYSPACES_API_KEY")
+                                .orElse("")
+                        )
+                        .get()
+                }
+
+                authentication {
+                    create<HttpHeaderAuthentication>("header")
+                }
+            }
+
+            maven {
+                name = "fancyspacesSnapshots"
+                url = uri("https://maven.fancyspaces.net/fancyinnovations/snapshots")
+
+                credentials(HttpHeaderCredentials::class) {
+                    name = "Authorization"
+                    value = providers
+                        .gradleProperty("fancyspacesApiKey")
+                        .orElse(
+                            providers
+                                .environmentVariable("FANCYSPACES_API_KEY")
+                                .orElse("")
+                        )
+                        .get()
+                }
+
+                authentication {
+                    create<HttpHeaderAuthentication>("header")
+                }
+            }
+
             maven {
                 name = "fancyinnovationsReleases"
                 url = uri("https://repo.fancyinnovations.com/releases")

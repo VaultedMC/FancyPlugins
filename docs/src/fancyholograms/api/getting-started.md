@@ -4,6 +4,11 @@ icon: dot
 
 # Getting started
 
+!!!danger
+This is the old documentation site for FancyInnovations, which is no longer maintained.
+The new documentation site can be found at [fancyinnovations.com/docs/minecraft-plugins/fancyholograms](https://fancyinnovations.com/docs/minecraft-plugins/fancyholograms).
+!!!
+
 ## Include the API in your project
 
 To include the FancyHolograms API in your project, you need to add the following dependency to your `build.gradle.kts` or `pom.xml` file.
@@ -131,4 +136,4 @@ manager.removeHologram("hologram_name");
 
 You can find the JavaDocs for the FancyHolograms API [here](https://repo.fancyinnovations.com/javadoc/releases/de/oliver/FancyHolograms/latest).
 
-Join the [FancyInnovations Discord](https://discord.gg/ZUgYCEJUEx) for help and support. There is a dedicated channel for help about the api (`#holograms-dev`).
+Join the [FancyInnovations Discord](https://discord.gg/ZUgYCEJUEx) for help and support. There is a dedicated channel for help about the api (`#holograms-api`).

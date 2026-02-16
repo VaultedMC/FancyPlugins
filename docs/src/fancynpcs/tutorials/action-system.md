@@ -4,6 +4,11 @@ icon: dot
 
 # Action system
 
+!!!danger
+This is the old documentation site for FancyInnovations, which is no longer maintained.
+The new documentation site can be found at [fancyinnovations.com/docs/minecraft-plugins/fancynpcs](https://fancyinnovations.com/docs/minecraft-plugins/fancynpcs).
+!!!
+
 The NPC Action System in FancyNPCs allows server administrators to create interactive and engaging NPCs by assigning actions that trigger based on player interactions or custom events. 
 This article explains the general concept of the system and provides a guide on how server admins can leverage it through commands.
 
@@ -55,7 +60,7 @@ Example: `/npc action (npc) (trigger) add player_command warp spawn`
 
 Executes a command as the player who triggered the action, but with operator privileges. This action is useful for performing player-specific operations that require operator permissions.
 
-!!! warning
+!!!warning
 FancyNpcs will gives the player operator permissions for the duration of the command execution. This means that the player will have access to all commands and permissions during that time.
 This can be a security risk if not used carefully, so make sure to use this action only when necessary and with trusted players.
 !!!
@@ -72,6 +77,10 @@ Sends the player to a different server. This action uses the plugin-messaging sy
 Syntax: `send_to_server (server name)`
 
 Example: `/npc action (npc) (trigger) add send_to_server skyblock`
+
+!!!info
+Make sure to set `bungee-plugin-message-channel` to `true` in the velocity.toml config file. Otherwise, this action might not work properly.
+!!!
 
 ### execute_random_action
 
@@ -117,6 +126,10 @@ Checks if the player has a specific permission. If the player does not have the 
 Syntax: `need_permission (permission)`
 
 Example: `/npc action (npc) (trigger) add need_permission my.cool.permission`
+
+!!!info
+If you add the `!` prefix to the permission, the action will be inverted. This means that the action list will be canceled if the player has the permission.
+!!!
 
 ### play_sound
 

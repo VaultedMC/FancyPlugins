@@ -4,6 +4,11 @@ icon: book
 ---
 # FAQ
 
+!!!danger
+This is the old documentation site for FancyInnovations, which is no longer maintained.
+The new documentation site can be found at [fancyinnovations.com/docs/minecraft-plugins/fancyholograms](https://fancyinnovations.com/docs/minecraft-plugins/fancyholograms).
+!!!
+
 ### How to modify each line in a hologram?
 
 Per-line settings (such as scale or background) are not supported in FancyHolograms due to a limitation with display entities.
@@ -12,7 +17,7 @@ A separate hologram will need to be created for each line.
 
 ### How to add a blank line?
 
-To add a blank line in a hologram, use `<r>` on a new line.
+To add a blank line in a hologram, use `<reset>` on a new line.
 
 ### How to make holograms clickable?
 

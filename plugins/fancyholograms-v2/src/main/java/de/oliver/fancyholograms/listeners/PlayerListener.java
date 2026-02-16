@@ -9,7 +9,11 @@ import org.bukkit.event.player.*;
 import org.bukkit.event.player.PlayerResourcePackStatusEvent.Status;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public final class PlayerListener implements Listener {
 
@@ -19,7 +23,7 @@ public final class PlayerListener implements Listener {
 
     public PlayerListener(@NotNull final FancyHolograms plugin) {
         this.plugin = plugin;
-        this.loadingResourcePacks = new HashMap<>();
+        this.loadingResourcePacks = new ConcurrentHashMap<>();
     }
 
     // For 1.20.2 and higher this method returns actual pack identifier, while for older versions, the identifier is a dummy UUID full of zeroes.
@@ -44,24 +48,30 @@ public final class PlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onJoin(@NotNull final PlayerJoinEvent event) {
-        for (final var hologram : this.plugin.getHologramsManager().getHolograms()) {
-            hologram.forceHideHologram(event.getPlayer());
-            hologram.forceUpdateShownStateFor(event.getPlayer());
-        }
+        FancyHolograms.get().getHologramThread().submit(() -> {
+            for (final var hologram : this.plugin.getHologramsManager().getHolograms()) {
+                hologram.forceHideHologram(event.getPlayer());
+                hologram.forceUpdateShownStateFor(event.getPlayer());
+            }
+        });
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onTeleport(@NotNull final PlayerTeleportEvent event) {
-        for (final Hologram hologram : this.plugin.getHologramsManager().getHolograms()) {
-            hologram.forceUpdateShownStateFor(event.getPlayer());
-        }
+        FancyHolograms.get().getHologramThread().submit(() -> {
+            for (final Hologram hologram : this.plugin.getHologramsManager().getHolograms()) {
+                hologram.forceUpdateShownStateFor(event.getPlayer());
+            }
+        });
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onWorldChange(@NotNull final PlayerChangedWorldEvent event) {
-        for (final Hologram hologram : this.plugin.getHologramsManager().getHolograms()) {
-            hologram.forceUpdateShownStateFor(event.getPlayer());
-        }
+        FancyHolograms.get().getHologramThread().submit(() -> {
+            for (final Hologram hologram : this.plugin.getHologramsManager().getHolograms()) {
+                hologram.forceUpdateShownStateFor(event.getPlayer());
+            }
+        });
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -83,9 +93,11 @@ public final class PlayerListener implements Listener {
                 // Removing player from the map, as they're no longer needed here.
                 loadingResourcePacks.remove(playerUniqueId);
                 // Refreshing holograms as to make sure custom textures are loaded.
-                for (final Hologram hologram : this.plugin.getHologramsManager().getHolograms()) {
-                    hologram.refreshHologram(event.getPlayer());
-                }
+                FancyHolograms.get().getHologramThread().submit(() -> {
+                    for (final Hologram hologram : this.plugin.getHologramsManager().getHolograms()) {
+                        hologram.refreshHologram(event.getPlayer());
+                    }
+                });
             }
         }
     }

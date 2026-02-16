@@ -4,6 +4,11 @@ order: 80
 ---
 # Contributing
 
+!!!danger
+This is the old documentation site for FancyInnovations, which is no longer maintained.
+The new documentation site can be found at [fancyinnovations.com/docs/minecraft-plugins](https://fancyinnovations.com/docs/minecraft-plugins).
+!!!
+
 This topic is all about the development guidelines that we follow. It is important to follow these guidelines to maintain the quality of the code and to make sure that the code is consistent and easy to read.
 
 ## Pull Requests
@@ -30,7 +35,7 @@ Follow the format described in the [Monorepo](monorepo.md) guidelines.
 
 Please make sure that your code is tested before marking the pull request as ready for review. This means that the code should compile and run without any errors. If you are unsure about how to test your code, please join our Discord server and ask for help.
 
-When creating a PR for FancyNpcs, please run the `/fancynpcs test` command in-game and attach a screenshot of the output to the PR.
+When creating a PR for FancyNpcs, please run the `/fancynpcs run_tests` command in-game and attach a screenshot of the output to the PR.
 
 ### Documentation
 

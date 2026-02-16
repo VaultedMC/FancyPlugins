@@ -7,6 +7,11 @@ order: 10
 
 # /Npc
 
+!!!danger
+This is the old documentation site for FancyInnovations, which is no longer maintained.
+The new documentation site can be found at [fancyinnovations.com/docs/minecraft-plugins/fancynpcs](https://fancyinnovations.com/docs/minecraft-plugins/fancynpcs).
+!!!
+
 The `/npc` command is the main command for managing NPCs. It allows you to create, modify, and remove NPCs. You can also customize NPCs by changing their type, skin, equipment, and more.
 
 ## Manage npcs
@@ -147,6 +152,25 @@ Sets an attribute of the NPC.
 - **Syntax**:  `/npc attribute (npc) (set | list)`
 - **Permissions**: `fancynpcs.command.npc.attribute.(sub)`
 
+### Set visibility
+
+Controls who can see the NPC through visibility modes.
+
+- **Syntax**:  `/npc visibility (npc) (all | permission_required | manual)`
+- **Permissions**: `fancynpcs.command.npc.visibility`
+
+**Visibility Modes:**
+
+`all` - Everyone can see the NPC (default behavior).
+
+`permission_required` - Players need the permission `fancynpcs.npc.<npc_name>.see` to see this NPC.
+
+`manual` - Players must be manually added through the API to see the NPC. This mode is intended for API usage and allows developers to control visibility programmatically.
+
+!!!info
+The `manual` visibility mode provides the most granular control and is designed for advanced integrations. See the [API documentation](../api/getting-started.md) for details on managing manual visibility through code.
+!!!
+
 ## Npc location and rotation
 
 ### Turn npc to player
@@ -176,6 +200,13 @@ Teleports NPC to specified location.
 
 - **Syntax**:  `/npc move_to (npc) (x) (y) (z) [world] [--look-in-my-direction]`
 - **Permissions**: `fancynpcs.command.npc.move_to`
+
+### Rotate npc
+
+Sets the yaw and pitch of the specified NPC.
+
+- **Syntax**:  `/npc rotate (npc) (yaw) (pitch)`
+- **Permissions**: `fancynpcs.command.npc.rotate`
 
 ### Center npc location
 
@@ -211,28 +242,36 @@ Learn more about actions and triggers in the [Action System](../tutorials/action
 Adds an action to the specified NPC's trigger.
 
 - **Syntax**: `/npc action (npc) (trigger) add (actionType) [value]`
-- **Permissions**: `fancynpcs.command.npc.action.add`
+- **Permissions**: 
+  - `fancynpcs.command.npc.action.add`
+  - and `fancynpcs.command.npc.action.add.(actionType | *)` for the specific action type
 
 ### Add action before
 
 Adds an action before the specified index in the NPC's action list for the given trigger.
 
 - **Syntax**: `/npc action (npc) (trigger) add_before (index) (actionType) [value]`
-- **Permissions**: `fancynpcs.command.npc.action.addBefore`
+- **Permissions**: 
+  - `fancynpcs.command.npc.action.addBefore`
+  - and `fancynpcs.command.npc.action.add.(actionType | *)` for the specific action type
 
 ### Add action after
 
 Adds an action after the specified index in the NPC's action list for the given trigger.
 
 - **Syntax**: `/npc action (npc) (trigger) add_after (index) (actionType) [value]`
-- **Permissions**: `fancynpcs.command.npc.action.addAfter`
+- **Permissions**: 
+  - `fancynpcs.command.npc.action.addAfter`
+  - and `fancynpcs.command.npc.action.add.(actionType | *)` for the specific action type
 
 ### Set action
 
 Sets an action at the specified number in the NPC's action list for the given trigger.
 
 - **Syntax**: `/npc action (npc) (trigger) set (number) (actionType) [value]`
-- **Permissions**: `fancynpcs.command.npc.action.set`
+- **Permissions**: 
+  - `fancynpcs.command.npc.action.set`
+  - and `fancynpcs.command.npc.action.add.(actionType | *)` for the specific action type
 
 ### Remove action
 
